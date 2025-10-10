@@ -1,191 +1,250 @@
 
+1. 🧩 Простой многостраничник
+2. 🪟 Пример модалки через роут
 
-### Установка
+---
+
+## 🧭 1. Установка
 
 ```bash
 npm install react-router-dom
 ```
 
-### Базовые понятия
+(если ещё нет типов)
 
-| Компонент              | Назначение                                                     |
-| ---------------------- | -------------------------------------------------------------- |
-| `<BrowserRouter>`      | Контейнер, обеспечивающий навигацию с помощью истории браузера |
-| `<Routes>`             | Обёртка для всех маршрутов                                     |
-| `<Route>`              | Описание конкретного пути и соответствующего компонента        |
-| `<Link>` / `<NavLink>` | Ссылки для навигации без перезагрузки страницы                 |
-| `useNavigate()`        | Хук для программной навигации                                  |
-| `useParams()`          | Хук для получения параметров URL                               |
-| `useLocation()`        | Хук для получения текущего пути и состояния                    |
-| `useSearchParams()`    | Работа с query-параметрами                                     |
+```bash
+npm install -D @types/react-router-dom
+```
 
 ---
 
-## 📄 Пример 1. Простой многостраничник
+## 📘 2. Основы
 
-### 📁 Структура проекта
+Импортируем:
+
+```tsx
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Link,
+  useParams,
+  useNavigate,
+  Outlet,
+  useLocation,
+} from "react-router-dom";
+```
+
+---
+
+## 🧩 3. Пример простого многостраничного приложения (TypeScript)
+
+**Структура:**
 
 ```
 src/
  ├─ pages/
  │   ├─ Home.tsx
  │   ├─ About.tsx
- │   └─ Contact.tsx
+ │   └─ User.tsx
  ├─ App.tsx
  └─ main.tsx
 ```
 
-### 🧱 `main.tsx`
+### `pages/Home.tsx`
 
 ```tsx
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
-import App from "./App";
+import { Link } from "react-router-dom";
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>
-);
-```
-
-### 🧭 `App.tsx`
-
-```tsx
-import { Routes, Route, Link } from "react-router-dom";
-import Home from "./pages/Home";
-import About from "./pages/About";
-import Contact from "./pages/Contact";
-
-const App = () => {
+export default function Home() {
   return (
     <div>
-      <nav style={{ display: "flex", gap: "1rem" }}>
-        <Link to="/">🏠 Home</Link>
-        <Link to="/about">ℹ️ About</Link>
-        <Link to="/contact">📞 Contact</Link>
+      <h1>Главная</h1>
+      <p>Добро пожаловать!</p>
+      <nav>
+        <Link to="/about">О нас</Link> | <Link to="/user/42">Профиль</Link>
       </nav>
+    </div>
+  );
+}
+```
 
+### `pages/About.tsx`
+
+```tsx
+export default function About() {
+  return (
+    <div>
+      <h1>О нас</h1>
+      <p>Это демо-приложение на React Router 6 + TypeScript.</p>
+    </div>
+  );
+}
+```
+
+### `pages/User.tsx`
+
+```tsx
+import { useParams } from "react-router-dom";
+
+type UserParams = {
+  id: string;
+};
+
+export default function User() {
+  const { id } = useParams<UserParams>();
+  return (
+    <div>
+      <h1>Профиль пользователя</h1>
+      <p>ID: {id}</p>
+    </div>
+  );
+}
+```
+
+### `App.tsx`
+
+```tsx
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import About from "./pages/About";
+import User from "./pages/User";
+
+export default function App() {
+  return (
+    <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
+        <Route path="/user/:id" element={<User />} />
       </Routes>
-    </div>
+    </BrowserRouter>
   );
-};
-
-export default App;
-```
-
-### 📜 Примеры страниц
-
-```tsx
-// src/pages/Home.tsx
-export default function Home() {
-  return <h1>Welcome to the Home page</h1>;
-}
-
-// src/pages/About.tsx
-export default function About() {
-  return <h1>About Us</h1>;
-}
-
-// src/pages/Contact.tsx
-export default function Contact() {
-  return <h1>Contact Page</h1>;
 }
 ```
 
 ---
 
-### 📦 `package.json` для многостраничника
+## 🪟 4. Пример модального окна по роуту (TypeScript)
 
-```json
-{
-  "name": "react-router-simple-ts",
-  "version": "1.0.0",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-router-dom": "^6.26.1"
-  },
-  "devDependencies": {
-    "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.3.3",
-    "typescript": "^5.5.4",
-    "vite": "^5.4.3"
-  }
-}
-```
-
----
-
-## 🪟 Пример 2. Модальное окно через маршрутизацию
-
-**Идея:**
-Открываем модалку при переходе на `/photo/:id`, но сохраняем фон (предыдущий экран).
-
-### 📁 Структура
+### Файловая структура
 
 ```
 src/
  ├─ pages/
  │   ├─ Gallery.tsx
  │   └─ PhotoModal.tsx
- ├─ App.tsx
- └─ main.tsx
+ └─ App.tsx
+```
+
+### `pages/Gallery.tsx`
+
+```tsx
+import { Link, Outlet, useLocation } from "react-router-dom";
+
+type Photo = {
+  id: number;
+  url: string;
+};
+
+const photos: Photo[] = [
+  { id: 1, url: "https://picsum.photos/id/101/300/200" },
+  { id: 2, url: "https://picsum.photos/id/102/300/200" },
+  { id: 3, url: "https://picsum.photos/id/103/300/200" },
+];
+
+export default function Gallery() {
+  const location = useLocation();
+
+  return (
+    <div>
+      <h1>Галерея</h1>
+      <div className="grid grid-cols-3 gap-4">
+        {photos.map((p) => (
+          <Link
+            key={p.id}
+            to={`/photo/${p.id}`}
+            state={{ background: location }}
+          >
+            <img
+              src={p.url}
+              alt={`Фото ${p.id}`}
+              className="rounded-xl shadow-lg"
+            />
+          </Link>
+        ))}
+      </div>
+
+      {/* Outlet нужен для модального окна */}
+      <Outlet />
+    </div>
+  );
+}
 ```
 
 ---
 
-### 🧱 `main.tsx`
-
-(аналогично предыдущему примеру)
+### `pages/PhotoModal.tsx`
 
 ```tsx
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
-import App from "./App";
+import { useNavigate, useParams } from "react-router-dom";
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>
-);
+type PhotoParams = {
+  id: string;
+};
+
+export default function PhotoModal() {
+  const { id } = useParams<PhotoParams>();
+  const navigate = useNavigate();
+
+  return (
+    <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
+      <div className="bg-white rounded-2xl p-6 shadow-lg">
+        <img
+          src={`https://picsum.photos/id/10${id}/600/400`}
+          alt={`Фото ${id}`}
+          className="rounded-xl mb-4"
+        />
+        <button
+          onClick={() => navigate(-1)}
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+        >
+          Закрыть
+        </button>
+      </div>
+    </div>
+  );
+}
 ```
 
 ---
 
-### 🧭 `App.tsx`
+### `App.tsx`
 
 ```tsx
-import { Routes, Route, useLocation } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useLocation,
+  Location,
+} from "react-router-dom";
 import Gallery from "./pages/Gallery";
 import PhotoModal from "./pages/PhotoModal";
 
-export default function App() {
+function AppRoutes() {
   const location = useLocation();
-  const state = location.state as { backgroundLocation?: Location };
+  const state = location.state as { background?: Location };
 
   return (
     <>
-      {/* Основной слой */}
-      <Routes location={state?.backgroundLocation || location}>
+      {/* Основные маршруты */}
+      <Routes location={state?.background || location}>
         <Route path="/" element={<Gallery />} />
       </Routes>
 
-      {/* Модальное окно */}
-      {state?.backgroundLocation && (
+      {/* Модальное окно поверх */}
+      {state?.background && (
         <Routes>
           <Route path="/photo/:id" element={<PhotoModal />} />
         </Routes>
@@ -193,133 +252,26 @@ export default function App() {
     </>
   );
 }
-```
 
----
-
-### 🖼️ `Gallery.tsx`
-
-```tsx
-import { Link, useLocation } from "react-router-dom";
-
-const photos = [
-  { id: 1, title: "Mountains" },
-  { id: 2, title: "Ocean" },
-  { id: 3, title: "Forest" },
-];
-
-export default function Gallery() {
-  const location = useLocation();
-
+export default function App() {
   return (
-    <div style={{ padding: "1rem" }}>
-      <h1>Gallery</h1>
-      <div style={{ display: "flex", gap: "1rem" }}>
-        {photos.map((photo) => (
-          <Link
-            key={photo.id}
-            to={`/photo/${photo.id}`}
-            state={{ backgroundLocation: location }}
-          >
-            <div
-              style={{
-                width: 120,
-                height: 120,
-                background: "#ccc",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                borderRadius: 8,
-              }}
-            >
-              {photo.title}
-            </div>
-          </Link>
-        ))}
-      </div>
-    </div>
+    <BrowserRouter>
+      <AppRoutes />
+    </BrowserRouter>
   );
 }
 ```
 
 ---
 
-### 🪟 `PhotoModal.tsx`
+## ⚡️ Важные моменты
 
-```tsx
-import { useNavigate, useParams } from "react-router-dom";
-
-export default function PhotoModal() {
-  const navigate = useNavigate();
-  const { id } = useParams();
-
-  return (
-    <div
-      onClick={() => navigate(-1)}
-      style={{
-        position: "fixed",
-        inset: 0,
-        backgroundColor: "rgba(0,0,0,0.5)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <div
-        onClick={(e) => e.stopPropagation()}
-        style={{
-          background: "white",
-          padding: "2rem",
-          borderRadius: 12,
-          textAlign: "center",
-        }}
-      >
-        <h2>Photo #{id}</h2>
-        <p>Some photo details...</p>
-        <button onClick={() => navigate(-1)}>Close</button>
-      </div>
-    </div>
-  );
-}
-```
-
----
-
-### 📦 `package.json` для примера с модалкой
-
-```json
-{
-  "name": "react-router-modal-ts",
-  "version": "1.0.0",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-router-dom": "^6.26.1"
-  },
-  "devDependencies": {
-    "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.3.3",
-    "typescript": "^5.5.4",
-    "vite": "^5.4.3"
-  }
-}
-```
-
----
-
-## ✅ Итого
-
-| Пример          | Цель                      | Ключевая особенность                |
-| --------------- | ------------------------- | ----------------------------------- |
-| Многостраничник | Базовая навигация         | `<Routes>` + `<Link>`               |
-| Модальное окно  | Навигация без потери фона | `location.state.backgroundLocation` |
+* **Типизация параметров:**
+  `useParams<{ id: string }>()`
+* **Типизация состояния маршрута:**
+  `const state = location.state as { background?: Location };`
+* **Закрытие модалки:**
+  `navigate(-1)` возвращает на предыдущую страницу.
 
 ---
 
