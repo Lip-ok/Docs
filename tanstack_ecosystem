@@ -1,0 +1,340 @@
+## README.md — Экосистема TanStack
+
+# TanStack Ecosystem — подробный гайд с примерами
+
+## 📌 Что такое TanStack?
+
+**TanStack** — это набор мощных headless-библиотек для фронтенда (в первую очередь для React, но также для Vue, Solid, Svelte и других).
+
+Главная идея: **логика без UI**.
+Вы получаете полный контроль над разметкой и стилями.
+
+Официальный сайт: [https://tanstack.com](https://tanstack.com)
+
+---
+
+# 📦 Основные библиотеки TanStack
+
+## 1️⃣ TanStack Query (React Query)
+
+Библиотека для управления серверным состоянием.
+
+Решает проблемы:
+
+* кеширование
+* refetch
+* синхронизация данных
+* background updates
+* optimistic updates
+* retry
+* pagination
+* infinite scroll
+
+### Установка
+
+```bash
+npm install @tanstack/react-query
+```
+
+### Базовая настройка
+
+```tsx
+// main.tsx
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+
+const queryClient = new QueryClient()
+
+root.render(
+  <QueryClientProvider client={queryClient}>
+    <App />
+  </QueryClientProvider>
+)
+```
+
+### Простой пример useQuery
+
+```tsx
+import { useQuery } from '@tanstack/react-query'
+
+function Users() {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['users'],
+    queryFn: () => fetch('/api/users').then(res => res.json())
+  })
+
+  if (isLoading) return <p>Loading...</p>
+  if (error) return <p>Error!</p>
+
+  return (
+    <ul>
+      {data.map(user => (
+        <li key={user.id}>{user.name}</li>
+      ))}
+    </ul>
+  )
+}
+```
+
+---
+
+### useMutation пример
+
+```tsx
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+
+function AddUser() {
+  const queryClient = useQueryClient()
+
+  const mutation = useMutation({
+    mutationFn: (newUser) =>
+      fetch('/api/users', {
+        method: 'POST',
+        body: JSON.stringify(newUser),
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['users'] })
+    }
+  })
+
+  return (
+    <button
+      onClick={() =>
+        mutation.mutate({ name: 'John' })
+      }
+    >
+      Add user
+    </button>
+  )
+}
+```
+
+---
+
+## 2️⃣ TanStack Table
+
+Headless таблица для сложных таблиц.
+
+Возможности:
+
+* сортировка
+* фильтрация
+* пагинация
+* виртуализация
+* grouping
+* row selection
+
+### Установка
+
+```bash
+npm install @tanstack/react-table
+```
+
+### Пример базовой таблицы
+
+```tsx
+import {
+  createColumnHelper,
+  useReactTable,
+  getCoreRowModel
+} from '@tanstack/react-table'
+
+const columnHelper = createColumnHelper()
+
+const columns = [
+  columnHelper.accessor('firstName', {
+    header: 'First Name',
+  }),
+  columnHelper.accessor('age', {
+    header: 'Age',
+  }),
+]
+
+function Table({ data }) {
+  const table = useReactTable({
+    data,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+  })
+
+  return (
+    <table>
+      <thead>
+        {table.getHeaderGroups().map(headerGroup => (
+          <tr key={headerGroup.id}>
+            {headerGroup.headers.map(header => (
+              <th key={header.id}>
+                {header.column.columnDef.header}
+              </th>
+            ))}
+          </tr>
+        ))}
+      </thead>
+
+      <tbody>
+        {table.getRowModel().rows.map(row => (
+          <tr key={row.id}>
+            {row.getVisibleCells().map(cell => (
+              <td key={cell.id}>
+                {cell.getValue()}
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  )
+}
+```
+
+---
+
+## 3️⃣ TanStack Router
+
+Типобезопасный роутер.
+
+Плюсы:
+
+* File-based routing (опционально)
+* Data loaders
+* Type-safe routes
+* Suspense-ready
+
+### Установка
+
+```bash
+npm install @tanstack/react-router
+```
+
+### Минимальный пример
+
+```tsx
+import {
+  createRouter,
+  RouterProvider,
+  Route,
+  RootRoute
+} from '@tanstack/react-router'
+
+const rootRoute = new RootRoute({
+  component: () => <div><Outlet /></div>
+})
+
+const indexRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/',
+  component: () => <h1>Home</h1>
+})
+
+const routeTree = rootRoute.addChildren([indexRoute])
+
+const router = createRouter({ routeTree })
+
+function App() {
+  return <RouterProvider router={router} />
+}
+```
+
+---
+
+## 4️⃣ TanStack Virtual
+
+Библиотека для виртуализации больших списков.
+
+Используется с:
+
+* таблицами
+* infinite scroll
+* чатами
+* большими списками
+
+```bash
+npm install @tanstack/react-virtual
+```
+
+Пример:
+
+```tsx
+import { useVirtualizer } from '@tanstack/react-virtual'
+
+function List({ items }) {
+  const parentRef = React.useRef()
+
+  const rowVirtualizer = useVirtualizer({
+    count: items.length,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => 35,
+  })
+
+  return (
+    <div ref={parentRef} style={{ height: 400, overflow: 'auto' }}>
+      <div
+        style={{
+          height: `${rowVirtualizer.getTotalSize()}px`,
+          position: 'relative',
+        }}
+      >
+        {rowVirtualizer.getVirtualItems().map(virtualRow => (
+          <div
+            key={virtualRow.key}
+            style={{
+              position: 'absolute',
+              top: 0,
+              transform: `translateY(${virtualRow.start}px)`
+            }}
+          >
+            {items[virtualRow.index]}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+```
+
+---
+
+# 🧠 Как библиотеки работают вместе
+
+Пример архитектуры:
+
+* TanStack Router — роутинг
+* TanStack Query — загрузка данных
+* TanStack Table — отображение данных
+* TanStack Virtual — оптимизация рендера
+
+Это позволяет строить масштабируемые SPA без Redux и лишнего boilerplate.
+
+---
+
+# 🚀 Почему TanStack — это уровень senior-разработки?
+
+* Чёткое разделение server state и client state
+* Предсказуемость
+* Минимум boilerplate
+* Отличная типизация
+* Контроль над перформансом
+
+---
+
+# 📚 Полезные ссылки
+
+* [https://tanstack.com/query](https://tanstack.com/query)
+* [https://tanstack.com/table](https://tanstack.com/table)
+* [https://tanstack.com/router](https://tanstack.com/router)
+* [https://tanstack.com/virtual](https://tanstack.com/virtual)
+
+---
+
+# 🏁 Итог
+
+TanStack — это экосистема инструментов для построения серьёзных фронтенд-приложений.
+
+Если ты хочешь:
+
+* писать enterprise-код
+* проходить senior-собеседования
+* строить масштабируемые системы
+
+— TanStack должен быть в твоём арсенале.
+
+
