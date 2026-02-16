@@ -1,5 +1,5 @@
 ````markdown
-TanStack Ecosystem — подробный гайд с базовыми примерами
+# TanStack Ecosystem — подробный гайд с базовыми примерами
 
 📌 Что такое TanStack?
 
@@ -14,7 +14,7 @@ TanStack Ecosystem — подробный гайд с базовыми прим�
  📦 Основные библиотеки TanStack
 
 
-1️⃣ TanStack Query (React Query)
+## 1️⃣ TanStack Query (React Query)
 
 Библиотека для управления **server state**.
 
