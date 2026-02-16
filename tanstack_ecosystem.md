@@ -1,7 +1,7 @@
 ````markdown
-# TanStack Ecosystem — подробный гайд с базовыми примерами
+TanStack Ecosystem — подробный гайд с базовыми примерами
 
-## 📌 Что такое TanStack?
+📌 Что такое TanStack?
 
 [TanStack](https://tanstack.com) — это набор мощных **headless-библиотек** для фронтенда (React, Vue, Solid, Svelte и др.).
 
@@ -10,17 +10,15 @@
 
 Вы получаете готовую бизнес-логику (кеширование, таблицы, роутинг и т.д.), но полностью контролируете разметку и стили.
 
----
 
-# 📦 Основные библиотеки TanStack
+ 📦 Основные библиотеки TanStack
 
----
 
-## 1️⃣ TanStack Query (React Query)
+1️⃣ TanStack Query (React Query)
 
 Библиотека для управления **server state**.
 
-### Решает проблемы:
+ Решает проблемы:
 - Кеширование
 - Refetch
 - Background updates
@@ -29,15 +27,13 @@
 - Infinite scroll
 - Optimistic updates
 
----
 
-### 📦 Установка
+📦 Установка
 
-```bash
+
 npm install @tanstack/react-query
 ````
 
----
 
 ### ⚙️ Базовая настройка
 
