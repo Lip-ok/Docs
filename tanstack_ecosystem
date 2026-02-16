@@ -1,48 +1,36 @@
----
-
-# ⚡ Урок: TanStack Ecosystem (Query + Table + Router + Virtual)
-
----
-
-## 🚀 1. Установка
-
-```bash
+⚡ Урок: TanStack Ecosystem (Query + Table + Router + Virtual)
+🚀 1. Установка
 npm install @tanstack/react-query
 npm install @tanstack/react-table
 npm install @tanstack/react-router
 npm install @tanstack/react-virtual
-```
+🧠 2. Что такое TanStack
 
----
-
-## 🧠 2. Что такое TanStack
-
-TanStack — это экосистема **headless-библиотек** для построения масштабируемых React-приложений.
+TanStack — это экосистема headless-библиотек для построения масштабируемых React-приложений.
 
 Главная идея:
 
-> Логика отдельно — UI отдельно.
+Логика отдельно — UI отдельно.
 
 Ты получаешь мощную бизнес-логику, но полностью контролируешь разметку и стили.
 
----
-
-# 🔥 3. TanStack Query — работа с серверным состоянием
+🔥 3. TanStack Query — работа с серверным состоянием
 
 Решает проблемы:
 
-* Кеширование
-* Повторные запросы
-* Фоновое обновление
-* Инвалидация
-* Мутации
-* Pagination / Infinite Scroll
+Кеширование
 
----
+Повторные запросы
 
-## 📦 Базовая настройка
+Фоновое обновление
 
-```tsx
+Инвалидация
+
+Мутации
+
+Pagination / Infinite Scroll
+
+📦 Базовая настройка
 // main.tsx
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
@@ -53,13 +41,7 @@ root.render(
     <App />
   </QueryClientProvider>
 )
-```
-
----
-
-## 📥 Пример useQuery
-
-```tsx
+📥 Пример useQuery
 import { useQuery } from '@tanstack/react-query'
 
 function Users() {
@@ -79,13 +61,7 @@ function Users() {
     </ul>
   )
 }
-```
-
----
-
-## ✍️ Пример useMutation
-
-```tsx
+✍️ Пример useMutation
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 function AddUser() {
@@ -108,19 +84,11 @@ function AddUser() {
     </button>
   )
 }
-```
-
----
-
-# 📊 4. TanStack Table — мощные таблицы
+📊 4. TanStack Table — мощные таблицы
 
 Headless-таблица для сложных интерфейсов.
 
----
-
-## 📋 Базовый пример
-
-```tsx
+📋 Базовый пример
 import {
   createColumnHelper,
   useReactTable,
@@ -171,19 +139,11 @@ function Table({ data }) {
     </table>
   )
 }
-```
-
----
-
-# 🛣 5. TanStack Router — типобезопасный роутинг
+🛣 5. TanStack Router — типобезопасный роутинг
 
 Современная альтернатива React Router с отличной типизацией.
 
----
-
-## Минимальный пример
-
-```tsx
+Минимальный пример
 import {
   createRouter,
   RouterProvider,
@@ -213,19 +173,11 @@ const router = createRouter({ routeTree })
 function App() {
   return <RouterProvider router={router} />
 }
-```
-
----
-
-# ⚡ 6. TanStack Virtual — оптимизация производительности
+⚡ 6. TanStack Virtual — оптимизация производительности
 
 Используется для больших списков и таблиц.
 
----
-
-## Пример виртуализации
-
-```tsx
+Пример виртуализации
 import { useVirtualizer } from '@tanstack/react-virtual'
 import React from 'react'
 
@@ -261,22 +213,19 @@ function List({ items }) {
     </div>
   )
 }
-```
-
----
-
-# 🧩 7. Как всё работает вместе
+🧩 7. Как всё работает вместе
 
 Типичная архитектура:
 
-* Router → управляет страницами
-* Query → загружает данные
-* Table → отображает данные
-* Virtual → оптимизирует рендер
+Router → управляет страницами
 
----
+Query → загружает данные
 
-# 🏁 Итог
+Table → отображает данные
+
+Virtual → оптимизирует рендер
+
+🏁 Итог
 
 TanStack — это набор инструментов для построения серьёзных SPA без Redux и лишнего бойлерплейта.
 
