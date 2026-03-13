@@ -1,179 +1,152 @@
-Вот версия **ультра-короткой шпаргалки в формате `README.md`** — можно прямо вставить в репозиторий GitHub.
 
 ```markdown
-# 🧠 Frontend Architecture & Security Cheat Sheet
+# 🧠 Frontend Developer Knowledge Cheat Sheet
 
-Краткая шпаргалка по:
-- ООП
-- паттернам проектирования
-- чистой архитектуре
-- алгоритмам
-- безопасности
+Краткая шпаргалка по ключевым темам для frontend-разработчика:
+
+- ООП и SOLID
+- Паттерны проектирования
+- Clean Architecture
+- Структуры данных и алгоритмы
+- Async / Await
 - REST API
-- хранению данных в браузере
+- Web Security
+- Browser Storage
+- Микросервисная архитектура
 
 ---
 
-# 1. ООП
+# 📦 Object-Oriented Programming (OOP)
 
 ## Основные принципы
 
-**Инкапсуляция**  
-Скрытие внутреннего состояния объекта.
-
-**Наследование**  
-Создание нового класса на основе существующего.
-
-**Полиморфизм**  
-Одинаковый интерфейс — разная реализация.
-
-**Абстракция**  
-Выделение важных характеристик и скрытие деталей.
+| Принцип | Описание |
+|---|---|
+| **Инкапсуляция** | Скрытие состояния объекта |
+| **Наследование** | Создание классов на основе других |
+| **Полиморфизм** | Один интерфейс — разные реализации |
+| **Абстракция** | Выделение важных характеристик |
 
 ---
 
-# 2. SOLID
+# 🧩 SOLID
 
 | Принцип | Значение |
 |---|---|
-| **S** | Single Responsibility — 1 класс = 1 ответственность |
-| **O** | Open/Closed — открыт для расширения, закрыт для изменения |
-| **L** | Liskov Substitution — подкласс должен заменять родителя |
-| **I** | Interface Segregation — много маленьких интерфейсов |
+| **S** | Single Responsibility — одна ответственность |
+| **O** | Open/Closed — открыт для расширения |
+| **L** | Liskov Substitution — подклассы заменяют родителя |
+| **I** | Interface Segregation — маленькие интерфейсы |
 | **D** | Dependency Inversion — зависимость от абстракций |
 
----
+Пример зависимости:
 
-# 3. Паттерны проектирования
+```
 
-## Порождающие
+UserService → UserRepository (interface)
 
-**Singleton**  
-Один экземпляр объекта.
-
-**Factory**  
-Создание объектов через фабрику.
-
-**Builder**  
-Пошаговое создание сложного объекта.
+```
 
 ---
 
-## Структурные
+# 🏗 Design Patterns
 
-**Adapter**  
-Приводит интерфейс к нужному виду.
+## Creational
 
-**Decorator**  
-Добавляет функциональность объекту.
-
-**Facade**  
-Упрощает интерфейс сложной системы.
-
----
-
-## Поведенческие
-
-**Observer**  
-Подписка на события.
-
-**Strategy**  
-Взаимозаменяемые алгоритмы.
+| Pattern | Назначение |
+|---|---|
+| Singleton | один экземпляр |
+| Factory | создание объектов |
+| Builder | поэтапное создание |
 
 ---
 
-# 4. Чистая архитектура (Clean Architecture)
+## Structural
+
+| Pattern | Назначение |
+|---|---|
+| Adapter | преобразование интерфейса |
+| Decorator | расширение функциональности |
+| Facade | упрощение сложной системы |
+
+---
+
+## Behavioral
+
+| Pattern | Назначение |
+|---|---|
+| Observer | подписка на события |
+| Strategy | взаимозаменяемые алгоритмы |
+
+---
+
+# 🧱 Clean Architecture
 
 Главная идея:
 
-> Бизнес-логика не должна зависеть от фреймворков.
+> Бизнес-логика не зависит от фреймворков.
 
-## Слои
-
-```
-
-Entities
-Use Cases
-Interface Adapters
-Frameworks
+## Слои архитектуры
 
 ```
 
-## Правило зависимостей
++-----------------------+
+|    Frameworks         |
+|  (React, NestJS)     |
++-----------------------+
+|  Interface Adapters   |
+|  Controllers, API     |
++-----------------------+
+|      Use Cases        |
+|    Business Logic     |
++-----------------------+
+|       Entities        |
+|     Domain Models     |
++-----------------------+
 
 ```
 
-Framework → UseCases → Entities
-
-```
+## Dependency Rule
 
 Зависимости направлены **внутрь**.
 
----
-
-# 5. Big O
-
-| Сложность | Значение |
-|---|---|
-| O(1) | константная |
-| O(log n) | логарифмическая |
-| O(n) | линейная |
-| O(n²) | квадратичная |
-
----
-
-# 6. Основные структуры данных
-
-## Array
-- доступ: `O(1)`
-- поиск: `O(n)`
-
-## Stack
-LIFO
-
 ```
 
-push
-pop
-
-```
-
-## Queue
-FIFO
-
-```
-
-enqueue
-dequeue
-
-```
-
-## Hash Table
-
-```
-
-Map
-Object
-
-```
-
-Средняя сложность операций:
-
-```
-
-O(1)
+Framework → Adapters → UseCases → Entities
 
 ````
 
-## Tree
+---
 
-Пример: **DOM**
+# ⚙️ Algorithms & Big O
+
+## Временная сложность
+
+| Complexity | Meaning |
+|---|---|
+| O(1) | constant |
+| O(log n) | logarithmic |
+| O(n) | linear |
+| O(n²) | quadratic |
 
 ---
 
-# 7. Async / Await
+# 📚 Data Structures
 
-❌ Ошибка
+| Structure | Использование |
+|---|---|
+| Array | быстрый доступ |
+| Stack | undo / recursion |
+| Queue | task processing |
+| Hash Table | быстрый поиск |
+| Tree | DOM |
+| Graph | маршруты |
+
+---
+
+# ⚡ Async / Await
+
+## Ошибка
 
 ```javascript
 array.forEach(async item => {
@@ -181,9 +154,11 @@ array.forEach(async item => {
 })
 ````
 
-`forEach` не ждёт `await`.
+`forEach` не ожидает `await`.
 
-✅ Правильно
+---
+
+## Правильно
 
 ```javascript
 for (const item of array) {
@@ -199,19 +174,21 @@ await Promise.all(array.map(fetch))
 
 ---
 
-# 8. REST API
+# 🌐 REST API
 
-## HTTP методы
+## HTTP Methods
 
-```
-GET
-POST
-PUT
-PATCH
-DELETE
-```
+| Method | Purpose              |
+| ------ | -------------------- |
+| GET    | получение данных     |
+| POST   | создание             |
+| PUT    | обновление           |
+| PATCH  | частичное обновление |
+| DELETE | удаление             |
 
-## Пример REST
+---
+
+## REST endpoints
 
 ```
 GET /users
@@ -222,52 +199,28 @@ DELETE /users/1
 
 ---
 
-## HTTP коды
+## HTTP Status Codes
 
-| Код | Значение     |
-| --- | ------------ |
-| 200 | OK           |
-| 201 | Created      |
-| 400 | Bad Request  |
-| 401 | Unauthorized |
-| 403 | Forbidden    |
-| 404 | Not Found    |
-| 500 | Server Error |
-
----
-
-# 9. HTTPS / TLS
-
-HTTPS =
-
-```
-HTTP + TLS
-```
-
-TLS обеспечивает:
-
-* шифрование
-* аутентификацию
-* целостность данных
-
-## TLS Handshake
-
-1. Client Hello
-2. Server Certificate
-3. Проверка CA
-4. Обмен ключами
-5. Session Key
+| Code | Meaning      |
+| ---- | ------------ |
+| 200  | OK           |
+| 201  | Created      |
+| 400  | Bad Request  |
+| 401  | Unauthorized |
+| 403  | Forbidden    |
+| 404  | Not Found    |
+| 500  | Server Error |
 
 ---
 
-# 10. Основные веб-атаки
+# 🔐 Web Security
 
-## XSS
+## XSS (Cross-Site Scripting)
 
 Вставка JS в страницу.
 
 ```html
-<script>alert(1)</script>
+<script>alert("XSS")</script>
 ```
 
 Защита:
@@ -278,7 +231,7 @@ TLS обеспечивает:
 
 ---
 
-## CSRF
+## CSRF (Cross-Site Request Forgery)
 
 Поддельный запрос от имени пользователя.
 
@@ -292,7 +245,7 @@ TLS обеспечивает:
 ## SQL Injection
 
 ```
-OR 1=1
+SELECT * FROM users WHERE id = 1 OR 1=1
 ```
 
 Защита:
@@ -302,13 +255,39 @@ OR 1=1
 
 ---
 
-# 11. Хранение данных в браузере
+# 🔑 HTTPS / TLS
+
+HTTPS =
+
+```
+HTTP + TLS
+```
+
+TLS обеспечивает:
+
+* encryption
+* authentication
+* integrity
+
+---
+
+## TLS Handshake
+
+1. Client Hello
+2. Server Certificate
+3. CA verification
+4. Key exchange
+5. Session key
+
+---
+
+# 💾 Browser Storage
 
 ## LocalStorage
 
 * ~5MB
-* синхронный API
-* хранит строки
+* synchronous
+* string only
 
 ```javascript
 localStorage.setItem("key", "value")
@@ -324,7 +303,7 @@ localStorage.setItem("key", "value")
 
 ## IndexedDB
 
-Асинхронная база данных браузера.
+Асинхронная база данных.
 
 Подходит для:
 
@@ -332,22 +311,24 @@ localStorage.setItem("key", "value")
 * offline apps
 * больших данных
 
-Особенности:
+Поддерживает:
 
 * индексы
 * транзакции
 
 ---
 
-# 12. Микросервисы
+# 🧩 Microservices
 
 Особенности:
 
 * независимые сервисы
 * отдельный deploy
-* собственная БД
+* собственная база данных
 
-## Коммуникация
+---
+
+## Communication
 
 ```
 HTTP
@@ -357,29 +338,34 @@ Message Queue
 
 ---
 
-# ⚠️ Частые вопросы на тестах
+# 🧪 Testing
 
-1. Принципы **SOLID**
-2. Паттерны **Observer / Factory / Singleton**
-3. Слои **Clean Architecture**
-4. **Big O**
-5. `async/await` в циклах
-6. Принципы **REST**
-7. **TLS handshake**
-8. **XSS vs CSRF**
-9. **LocalStorage vs IndexedDB**
-10. **Unit vs Integration тесты**
+Типы тестов:
 
-```
+| Type        | Purpose             |
+| ----------- | ------------------- |
+| Unit        | тест функции        |
+| Integration | тест взаимодействия |
+| E2E         | тест приложения     |
 
 ---
 
-Если хочешь, я могу ещё сделать **улучшенную версию README**, которую реально любят на GitHub:
+# 🚀 Most Asked Interview / Test Questions
 
-- с **диаграммой Clean Architecture**
-- **таблицей паттернов**
-- **таблицей атак безопасности**
-- **алгоритмической шпаргалкой**
+1. Принципы **SOLID**
+2. Паттерны **Observer / Factory / Singleton**
+3. **Clean Architecture layers**
+4. **Big O**
+5. `async/await` в циклах
+6. REST принципы
+7. TLS handshake
+8. XSS vs CSRF
+9. LocalStorage vs IndexedDB
+10. Unit vs Integration тесты
 
-Она будет выглядеть **как профессиональный репозиторий для подготовки к собеседованиям**.
+---
+
+⭐ Используй этот README как шпаргалку перед тестами и интервью.
+
+```
 ```
